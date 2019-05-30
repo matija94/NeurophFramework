@@ -6,21 +6,20 @@ import org.neuroph.core.events.LearningEventListener;
 import org.neuroph.nnet.learning.BackPropagation;
 
 import javax.swing.*;
-import java.util.Arrays;
 
 public class RegressionSample {
 
     public static void main(String args[]) {
 
-        JFrame frame = new JFrame("Neural network primer");
+        JFrame frame = new JFrame("Neural network linear regression example");
 
         String func = JOptionPane.showInputDialog(frame, "Function");
 
-        double min = Double.parseDouble(JOptionPane.showInputDialog(frame, "min"));
-        double max = Double.parseDouble(JOptionPane.showInputDialog(frame, "max"));
-        double interval = Double.parseDouble(JOptionPane.showInputDialog(frame, "interval"));
+        double min = Double.parseDouble(JOptionPane.showInputDialog(frame, "training set min"));
+        double max = Double.parseDouble(JOptionPane.showInputDialog(frame, "training set max"));
+        double interval = Double.parseDouble(JOptionPane.showInputDialog(frame, "training set interval"));
 
-        RegressionNetConfig conf = new RegressionNetConfig(new int[] {1, 16, 16, 1}, 0.01,
+        RegressionNetConfig conf = new RegressionNetConfig(new int[] {1, 16, 16, 1}, 0.1,
                 1, 100000, new LearningListener());
         RegressionNet net = new RegressionNet(conf);
         net.printNetworkInfo();
@@ -29,11 +28,14 @@ public class RegressionSample {
         DataSet ds = fn.generateTrainingDataSet(min, max, interval);
         System.out.println(ds);
         net.learn(ds);
-        System.out.println("Testing NN");
-        double output[] = net.calculate(new double[]{2.1});
-        System.out.println(Arrays.toString(output));
 
-        DataSet dsTest = fn.generateTrainingDataSet(0.5, 50, 0.001);
+        min = Double.parseDouble(JOptionPane.showInputDialog(frame, "test set min"));
+        max = Double.parseDouble(JOptionPane.showInputDialog(frame, "test set max"));
+        interval = Double.parseDouble(JOptionPane.showInputDialog(frame, "test set interval"));
+
+
+        DataSet dsTest = fn.generateTrainingDataSet(min, max, interval);
+        System.out.println(dsTest);
         net.testNeuralNetwork(dsTest);
 
 
